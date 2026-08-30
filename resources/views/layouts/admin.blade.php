@@ -643,14 +643,12 @@
     <div class="logo-area">
 
 
+        <!-- LOCAL MINISTRY LOGO -->
+
         <img
-
             class="logo"
-
-            src="https://scontent.fbsa1-1.fna.fbcdn.net/v/t39.30808-6/672688130_1267529012232197_8272294226841489506_n.jpg?stp=dst-jpg_tt6&cstp=mx400x400&ctp=s400x400&_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=18Ofv1XI_z8Q7kNvwFmht2d&_nc_oc=Adr6RIxjlnhLWLLdWvZa9Thlf4SZx59lanoWJkdhReWFvH0ocLngjTGYxMk5nq7EozA&_nc_zt=23&_nc_ht=scontent.fbsa1-1.fna&_nc_gid=n5ktm50_LZUhEM1gfyk4yw&_nc_ss=7b2a8&oh=00_AQJNTZlCepFSAkMahK6yV1AkjeW7m53Vyyh1pVjEDDhFkg&oe=6A98EBD0"
-
-            alt="Ministry Logo"
-
+            src="{{ asset('mfmr-logo.jpg') }}"
+            alt="Ministry of Fisheries and Marine Resources"
         >
 
 
@@ -675,6 +673,7 @@
     </div>
 
 
+
     <!-- =================================================
          NAVIGATION
     ================================================== -->
@@ -690,11 +689,8 @@
 
 
         <a
-
             href="{{ route('admin.dashboard') }}"
-
             class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-
         >
 
             <span class="nav-icon">
@@ -709,11 +705,8 @@
 
 
         <a
-
             href="{{ route('admin.agents') }}"
-
             class="{{ request()->routeIs('admin.agents*') ? 'active' : '' }}"
-
         >
 
             <span class="nav-icon">
@@ -728,11 +721,8 @@
 
 
         <a
-
             href="{{ route('admin.approved') }}"
-
             class="{{ request()->routeIs('admin.approved') ? 'active' : '' }}"
-
         >
 
             <span class="nav-icon">
@@ -747,6 +737,7 @@
 
 
     </div>
+
 
 
     <!-- =================================================
@@ -779,24 +770,17 @@
         <!-- REAL LOGOUT -->
 
         <form
-
             class="logout-form"
-
             action="{{ route('admin.logout') }}"
-
             method="POST"
-
         >
 
             @csrf
 
 
             <button
-
                 type="submit"
-
                 class="logout-button"
-
             >
 
                 ⇥ &nbsp; Logout
@@ -811,6 +795,7 @@
 
 
 </div>
+
 
 
 <!-- =====================================================
@@ -853,6 +838,7 @@
 
 
     </div>
+
 
 
     <!-- PAGE CONTENT -->
