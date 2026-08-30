@@ -6,6 +6,10 @@
 
 <style>
 
+    /* =====================================================
+       PAGE HEADER
+    ===================================================== */
+
     .review-header {
         display: flex;
         justify-content: space-between;
@@ -24,11 +28,16 @@
     .review-title p {
         margin: 5px 0 0;
         color: #7b858c;
-        font-size: 14px;
+        font-size: 13px;
     }
 
+
+    /* =====================================================
+       CARDS
+    ===================================================== */
+
     .review-card {
-        background: #fff;
+        background: #ffffff;
         border-radius: 14px;
         border: 1px solid #e8edf1;
         box-shadow: 0 4px 18px rgba(0,0,0,.05);
@@ -52,31 +61,42 @@
         padding: 22px;
     }
 
+
+    /* =====================================================
+       INFORMATION
+    ===================================================== */
+
     .info-item {
         margin-bottom: 18px;
     }
 
     .info-label {
-        font-size: 11px;
+        font-size: 10px;
         text-transform: uppercase;
-        letter-spacing: .6px;
+        letter-spacing: .7px;
         color: #8a969e;
         font-weight: 700;
-        margin-bottom: 3px;
+        margin-bottom: 4px;
     }
 
     .info-value {
         color: #26343d;
         font-size: 14px;
         font-weight: 500;
+        word-break: break-word;
     }
+
+
+    /* =====================================================
+       PHOTO
+    ===================================================== */
 
     .agent-photo {
         width: 145px;
         height: 145px;
         object-fit: cover;
         border-radius: 12px;
-        border: 4px solid #fff;
+        border: 4px solid #ffffff;
         box-shadow: 0 4px 15px rgba(0,0,0,.12);
     }
 
@@ -90,13 +110,20 @@
         justify-content: center;
         color: #8a969e;
         font-size: 13px;
+        margin: auto;
+        border: 1px solid #e2e7ea;
     }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
 
     .status-badge {
         display: inline-block;
         padding: 6px 13px;
         border-radius: 30px;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 700;
         text-transform: uppercase;
     }
@@ -121,19 +148,56 @@
         color: #8a4b00;
     }
 
+
+    /* =====================================================
+       APPLICATION CODES
+    ===================================================== */
+
+    .application-code {
+        display: inline-block;
+        font-family: monospace;
+        background: #eef4f7;
+        color: #063b5c;
+        padding: 6px 10px;
+        border-radius: 5px;
+        font-size: 12px;
+        border: 1px solid #e0e9ed;
+        letter-spacing: .4px;
+    }
+
+
+    /* =====================================================
+       DOCUMENTS
+    ===================================================== */
+
     .documents-table th {
-        font-size: 11px;
+        font-size: 10px;
         text-transform: uppercase;
         letter-spacing: .5px;
         color: #7b858c;
         background: #f8fafb;
         border-bottom: 1px solid #e9ecef;
+        white-space: nowrap;
     }
 
     .documents-table td {
         vertical-align: middle;
-        font-size: 14px;
+        font-size: 13px;
     }
+
+    .document-name {
+        max-width: 350px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+
+    /* =====================================================
+       DECISION
+    ===================================================== */
 
     .decision-box {
         background: #f8fafb;
@@ -154,13 +218,14 @@
         margin-top: 15px;
     }
 
-    .application-code {
-        font-family: monospace;
-        background: #eef4f7;
-        color: #063b5c;
-        padding: 5px 9px;
-        border-radius: 5px;
-        font-size: 13px;
+
+    /* =====================================================
+       APPLICATION META
+    ===================================================== */
+
+    .meta-line {
+        font-size: 11px;
+        color: #8b969d;
     }
 
 </style>
@@ -174,12 +239,23 @@
 
     <div class="review-title">
 
+        <div style="
+            font-size:10px;
+            font-weight:700;
+            letter-spacing:1.3px;
+            color:#8b969d;
+            margin-bottom:5px;
+        ">
+            APPLICATION MANAGEMENT
+        </div>
+
         <h2>
             Review Application
         </h2>
 
         <p>
             Review applicant information and submitted documents
+            before making an administrative decision.
         </p>
 
     </div>
@@ -197,7 +273,7 @@
 
 
 {{-- =========================================================
-     APPLICATION SUMMARY
+     APPLICATION INFORMATION
 ========================================================= --}}
 
 <div class="review-card">
@@ -206,35 +282,57 @@
 
         <div class="d-flex justify-content-between align-items-center">
 
-            <h5>
-                Application Information
-            </h5>
+            <div>
 
-            @if($agent->status === 'pending')
+                <h5>
+                    Application Information
+                </h5>
 
-                <span class="status-badge status-pending">
-                    Pending
-                </span>
+                @if($agent->created_at)
 
-            @elseif($agent->status === 'approved')
+                    <div class="meta-line mt-1">
 
-                <span class="status-badge status-approved">
-                    Approved
-                </span>
+                        Submitted
+                        {{ $agent->created_at->format('d M Y, h:i A') }}
 
-            @elseif($agent->status === 'denied')
+                    </div>
 
-                <span class="status-badge status-denied">
-                    Denied
-                </span>
+                @endif
 
-            @elseif($agent->status === 'correction_required')
+            </div>
 
-                <span class="status-badge status-correction">
-                    Correction Required
-                </span>
 
-            @endif
+            {{-- STATUS --}}
+
+            <div>
+
+                @if($agent->status === 'pending')
+
+                    <span class="status-badge status-pending">
+                        Pending
+                    </span>
+
+                @elseif($agent->status === 'approved')
+
+                    <span class="status-badge status-approved">
+                        Approved
+                    </span>
+
+                @elseif($agent->status === 'denied')
+
+                    <span class="status-badge status-denied">
+                        Denied
+                    </span>
+
+                @elseif($agent->status === 'correction_required')
+
+                    <span class="status-badge status-correction">
+                        Correction Required
+                    </span>
+
+                @endif
+
+            </div>
 
         </div>
 
@@ -246,12 +344,16 @@
         <div class="row">
 
 
-            {{-- AGENT INFORMATION --}}
+            {{-- =================================================
+                 APPLICANT INFORMATION
+            ================================================== --}}
 
             <div class="col-lg-8">
 
                 <div class="row">
 
+
+                    {{-- NAME --}}
 
                     <div class="col-md-6">
 
@@ -270,6 +372,8 @@
                     </div>
 
 
+                    {{-- PHONE --}}
+
                     <div class="col-md-6">
 
                         <div class="info-item">
@@ -287,6 +391,8 @@
                     </div>
 
 
+                    {{-- EMAIL --}}
+
                     <div class="col-md-6">
 
                         <div class="info-item">
@@ -296,15 +402,15 @@
                             </div>
 
                             <div class="info-value">
-
                                 {{ $agent->email ?: 'Not provided' }}
-
                             </div>
 
                         </div>
 
                     </div>
 
+
+                    {{-- ADDRESS --}}
 
                     <div class="col-md-6">
 
@@ -323,6 +429,8 @@
                     </div>
 
 
+                    {{-- REGION --}}
+
                     <div class="col-md-4">
 
                         <div class="info-item">
@@ -339,6 +447,8 @@
 
                     </div>
 
+
+                    {{-- CITY --}}
 
                     <div class="col-md-4">
 
@@ -357,6 +467,8 @@
                     </div>
 
 
+                    {{-- COUNTRY --}}
+
                     <div class="col-md-4">
 
                         <div class="info-item">
@@ -373,6 +485,8 @@
 
                     </div>
 
+
+                    {{-- TRACKING CODE --}}
 
                     @if($agent->tracking_code)
 
@@ -398,6 +512,8 @@
 
                     @endif
 
+
+                    {{-- REGISTRATION NUMBER --}}
 
                     @if($agent->registration_number)
 
@@ -429,7 +545,10 @@
             </div>
 
 
-            {{-- PHOTO --}}
+
+            {{-- =================================================
+                 AGENT PHOTO
+            ================================================== --}}
 
             <div class="col-lg-4 text-center">
 
@@ -438,23 +557,26 @@
                 </div>
 
 
-                @if($agent->photo)
+                @if($agent->photo_url)
 
                     <img
-                        src="{{ asset('storage/' . $agent->photo) }}"
+                        src="{{ $agent->photo_url }}"
                         class="agent-photo"
-                        alt="Agent Photo"
+                        alt="{{ $agent->name }}"
                     >
 
                 @else
 
-                    <div class="no-photo mx-auto">
-                        No Photo
+                    <div class="no-photo">
+
+                        No Photo Available
+
                     </div>
 
                 @endif
 
             </div>
+
 
         </div>
 
@@ -465,16 +587,28 @@
 
 
 {{-- =========================================================
-     DOCUMENTS
+     SUBMITTED DOCUMENTS
 ========================================================= --}}
 
 <div class="review-card">
 
     <div class="review-card-header">
 
-        <h5>
-            Submitted Documents
-        </h5>
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h5>
+                Submitted Documents
+            </h5>
+
+            <span class="meta-line">
+
+                {{ $agent->documents->count() }}
+
+                document{{ $agent->documents->count() == 1 ? '' : 's' }}
+
+            </span>
+
+        </div>
 
     </div>
 
@@ -512,43 +646,72 @@
 
                 <tbody>
 
+
                     @forelse($agent->documents as $document)
 
                         <tr>
 
-                            <td>
-                                {{ $loop->iteration }}
-                            </td>
+                            {{-- NUMBER --}}
 
                             <td>
+
+                                {{ $loop->iteration }}
+
+                            </td>
+
+
+                            {{-- DOCUMENT TYPE --}}
+
+                            <td>
+
                                 <strong>
                                     {{ $document->document_type }}
                                 </strong>
+
                             </td>
+
+
+                            {{-- FILE NAME --}}
 
                             <td>
 
-                                <small class="text-muted">
-
+                                <small
+                                    class="text-muted document-name"
+                                    title="{{ $document->file_name }}"
+                                >
                                     {{ $document->file_name }}
-
                                 </small>
 
                             </td>
 
+
+                            {{-- ACTION --}}
+
                             <td class="text-end">
 
-                                <a
-                                    href="{{ asset('storage/' . $document->file_path) }}"
-                                    target="_blank"
-                                    class="btn btn-sm btn-outline-primary"
-                                >
-                                    View Document
-                                </a>
+                                @if($document->file_url)
+
+                                    <a
+                                        href="{{ $document->file_url }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="btn btn-sm btn-outline-primary"
+                                    >
+                                        View Document
+                                    </a>
+
+                                @else
+
+                                    <span class="badge bg-secondary">
+                                        File unavailable
+                                    </span>
+
+                                @endif
 
                             </td>
 
                         </tr>
+
 
                     @empty
 
@@ -558,12 +721,15 @@
                                 colspan="4"
                                 class="text-center text-muted py-4"
                             >
+
                                 No documents found.
+
                             </td>
 
                         </tr>
 
                     @endforelse
+
 
                 </tbody>
 
@@ -578,7 +744,7 @@
 
 
 {{-- =========================================================
-     ADMIN DECISION
+     ADMINISTRATIVE DECISION
 ========================================================= --}}
 
 <div class="review-card">
@@ -595,16 +761,29 @@
     <div class="review-card-body">
 
 
-        @if($agent->status === 'pending' || $agent->status === 'correction_required')
+        @if(
+            $agent->status === 'pending' ||
+            $agent->status === 'correction_required'
+        )
 
 
             <div class="decision-box">
 
-                <label class="form-label fw-semibold">
 
+                <label
+                    for="comment"
+                    class="form-label fw-semibold"
+                >
                     Administrative Comment
-
                 </label>
+
+
+                <div class="text-muted mb-3" style="font-size:11px;">
+
+                    Add a comment if the applicant needs
+                    additional information or correction.
+
+                </div>
 
 
                 <textarea
@@ -616,10 +795,13 @@
                 >{{ $agent->admin_comment }}</textarea>
 
 
+
                 <div class="decision-buttons">
 
 
-                    {{-- APPROVE --}}
+                    {{-- =================================================
+                         APPROVE
+                    ================================================== --}}
 
                     <form
                         action="{{ route('admin.agents.approve', $agent) }}"
@@ -631,6 +813,11 @@
                         <button
                             type="submit"
                             class="btn btn-success"
+                            onclick="
+                                return confirm(
+                                    'Are you sure you want to approve this application?'
+                                );
+                            "
                         >
 
                             ✓ Approve Application
@@ -640,7 +827,10 @@
                     </form>
 
 
-                    {{-- SEND BACK --}}
+
+                    {{-- =================================================
+                         SEND BACK
+                    ================================================== --}}
 
                     <form
                         action="{{ route('admin.agents.send-back', $agent) }}"
@@ -655,23 +845,41 @@
                             id="sendBackComment"
                         >
 
+
                         <button
                             type="submit"
                             class="btn btn-warning"
                             onclick="
                                 document.getElementById('sendBackComment').value =
                                 document.getElementById('comment').value;
+
+                                if (
+                                    !document.getElementById('comment').value.trim()
+                                ) {
+                                    alert(
+                                        'Please provide a comment explaining what needs to be corrected.'
+                                    );
+
+                                    return false;
+                                }
+
+                                return confirm(
+                                    'Send this application back to the applicant for correction?'
+                                );
                             "
                         >
 
-                            ↻ Send Back
+                            ↻ Send Back for Correction
 
                         </button>
 
                     </form>
 
 
-                    {{-- DENY --}}
+
+                    {{-- =================================================
+                         DENY
+                    ================================================== --}}
 
                     <form
                         action="{{ route('admin.agents.deny', $agent) }}"
@@ -686,12 +894,27 @@
                             id="denyComment"
                         >
 
+
                         <button
                             type="submit"
                             class="btn btn-danger"
                             onclick="
                                 document.getElementById('denyComment').value =
                                 document.getElementById('comment').value;
+
+                                if (
+                                    !document.getElementById('comment').value.trim()
+                                ) {
+                                    alert(
+                                        'Please provide a comment explaining the reason for denial.'
+                                    );
+
+                                    return false;
+                                }
+
+                                return confirm(
+                                    'Are you sure you want to deny this application?'
+                                );
                             "
                         >
 
@@ -710,39 +933,80 @@
         @else
 
 
+            {{-- =================================================
+                 PROCESSED APPLICATION
+            ================================================== --}}
+
             <div class="alert alert-secondary mb-0">
 
-                <strong>
+                <div class="fw-semibold mb-2">
+
                     This application has already been processed.
-                </strong>
 
-                <br><br>
+                </div>
 
-                Status:
 
-                <strong>
-                    {{ ucfirst(str_replace('_', ' ', $agent->status)) }}
-                </strong>
+                <div>
+
+                    Status:
+
+                    <strong>
+
+                        {{ ucfirst(
+                            str_replace(
+                                '_',
+                                ' ',
+                                $agent->status
+                            )
+                        ) }}
+
+                    </strong>
+
+                </div>
 
 
                 @if($agent->admin_comment)
 
                     <hr>
 
-                    <strong>
+                    <div class="fw-semibold">
+
                         Administrative Comment:
-                    </strong>
 
-                    <br>
+                    </div>
 
-                    {{ $agent->admin_comment }}
+                    <div class="mt-1">
+
+                        {{ $agent->admin_comment }}
+
+                    </div>
 
                 @endif
 
 
+                @if($agent->approved_at)
+
+                    <hr>
+
+                    <div>
+
+                        Approved:
+
+                        <strong>
+
+                            {{ $agent->approved_at->format('d F Y, h:i A') }}
+
+                        </strong>
+
+                    </div>
+
+                @endif
+
             </div>
 
+
         @endif
+
 
     </div>
 

@@ -7,29 +7,47 @@ use Illuminate\Http\Request;
 
 class AgentController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | SHOW REGISTRATION FORM
+    |--------------------------------------------------------------------------
+    */
+
     public function create()
     {
         return view('agent.register');
     }
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | STORE APPLICATION
+    |--------------------------------------------------------------------------
+    */
+
     public function store(Request $request)
     {
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDATION
+        |--------------------------------------------------------------------------
+        */
+
         $request->validate([
 
-            'name' => 'required',
+            'name' => 'required|string|max:255',
 
-            'phone' => 'required',
+            'phone' => 'required|string|max:255',
 
-            'email' => 'nullable|email',
+            'email' => 'nullable|email|max:255',
 
-            'address' => 'required',
+            'address' => 'required|string|max:255',
 
-            'region' => 'required',
+            'region' => 'required|string|max:255',
 
-            'city' => 'required',
+            'city' => 'required|string|max:255',
 
-            'country' => 'required',
+            'country' => 'required|string|max:255',
 
             'photo' => 'nullable|image|max:2048',
 
@@ -59,23 +77,35 @@ class AgentController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | GENERATE TRACKING CODE
+        | GENERATE UNIQUE TRACKING CODE
         |--------------------------------------------------------------------------
         */
 
-        $agent->tracking_code =
-            'MFMR-' .
-            date('Y') .
-            '-' .
-            strtoupper(
-                substr(
-                    str_shuffle(
-                        'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
-                    ),
-                    0,
-                    6
-                )
-            );
+        do {
+
+            $trackingCode =
+                'MFMR-' .
+                date('Y') .
+                '-' .
+                strtoupper(
+                    substr(
+                        str_shuffle(
+                            'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+                        ),
+                        0,
+                        6
+                    )
+                );
+
+        } while (
+            Agent::where(
+                'tracking_code',
+                $trackingCode
+            )->exists()
+        );
+
+
+        $agent->tracking_code = $trackingCode;
 
 
         /*
@@ -103,8 +133,12 @@ class AgentController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | PHOTO
+        | AGENT PHOTO
         |--------------------------------------------------------------------------
+        |
+        | IMPORTANT:
+        | The photo is now stored on the PRIVATE disk.
+        |
         */
 
         if ($request->hasFile('photo')) {
@@ -112,8 +146,10 @@ class AgentController extends Controller
             $agent->photo =
                 $request
                     ->file('photo')
-                    ->store('agents/photos', 'public');
-
+                    ->store(
+                        'agents/photos',
+                        'private'
+                    );
         }
 
 
@@ -128,26 +164,42 @@ class AgentController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | DOCUMENTS
+        | REQUIRED DOCUMENTS
         |--------------------------------------------------------------------------
         */
 
         $documents = [
 
-            'tin' => 'TIN Number',
+            'tin' =>
+                'TIN Number',
 
-            'business_license' => 'Business License',
+            'business_license' =>
+                'Business License',
 
-            'company_profile' => 'Company Profile',
+            'company_profile' =>
+                'Company Profile',
 
-            'account_number' => 'Account Number',
+            'account_number' =>
+                'Account Number',
 
-            'fisheries_license' => 'Fisheries / Marine License',
+            'fisheries_license' =>
+                'Fisheries / Marine License',
 
-            'national_id' => 'National ID / Registration Document',
+            'national_id' =>
+                'National ID / Registration Document',
 
         ];
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | STORE DOCUMENTS
+        |--------------------------------------------------------------------------
+        |
+        | IMPORTANT:
+        | All documents are stored on the PRIVATE disk.
+        |
+        */
 
         foreach ($documents as $field => $type) {
 
@@ -157,39 +209,40 @@ class AgentController extends Controller
             $path =
                 $file->store(
                     'agents/documents',
-                    'public'
+                    'private'
                 );
 
 
             $agent->documents()->create([
 
-                'document_type' => $type,
+                'document_type' =>
+                    $type,
 
                 'file_name' =>
                     $file->getClientOriginalName(),
 
-                'file_path' => $path,
+                'file_path' =>
+                    $path,
 
-                'status' => 'pending',
+                'status' =>
+                    'pending',
 
             ]);
-
         }
 
 
         /*
         |--------------------------------------------------------------------------
-        | SUCCESS
+        | RETURN SUCCESS
         |--------------------------------------------------------------------------
         */
 
-        return redirect('/register-agent')
-
+        return redirect()
+            ->route('agent.create')
             ->with(
                 'success',
-                'Agent registration submitted successfully.'
+                'Your application has been submitted successfully.'
             )
-
             ->with(
                 'tracking_code',
                 $agent->tracking_code

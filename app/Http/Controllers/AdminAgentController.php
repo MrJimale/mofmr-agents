@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminAgentController extends Controller
 {
@@ -23,7 +24,9 @@ class AdminAgentController extends Controller
 
         $correction = Agent::where('status', 'correction_required')->count();
 
-        $agents = Agent::latest()->take(10)->get();
+        $agents = Agent::latest()
+            ->take(10)
+            ->get();
 
         return view('admin.dashboard', compact(
             'total',
@@ -82,7 +85,10 @@ class AdminAgentController extends Controller
 
         return redirect()
             ->route('admin.agents.show', $agent)
-            ->with('success', 'Agent approved successfully.');
+            ->with(
+                'success',
+                'Agent approved successfully.'
+            );
     }
 
 
@@ -90,8 +96,14 @@ class AdminAgentController extends Controller
     // SEND BACK FOR CORRECTION
     // =========================
 
-    public function sendBack(Request $request, Agent $agent)
-    {
+    public function sendBack(
+        Request $request,
+        Agent $agent
+    ) {
+        $request->validate([
+            'comment' => 'nullable|string|max:5000',
+        ]);
+
         $agent->status = 'correction_required';
 
         $agent->admin_comment = $request->comment;
@@ -100,7 +112,10 @@ class AdminAgentController extends Controller
 
         return redirect()
             ->route('admin.agents.show', $agent)
-            ->with('success', 'Application sent back for correction.');
+            ->with(
+                'success',
+                'Application sent back for correction.'
+            );
     }
 
 
@@ -108,8 +123,14 @@ class AdminAgentController extends Controller
     // DENY
     // =========================
 
-    public function deny(Request $request, Agent $agent)
-    {
+    public function deny(
+        Request $request,
+        Agent $agent
+    ) {
+        $request->validate([
+            'comment' => 'nullable|string|max:5000',
+        ]);
+
         $agent->status = 'denied';
 
         $agent->admin_comment = $request->comment;
@@ -118,7 +139,10 @@ class AdminAgentController extends Controller
 
         return redirect()
             ->route('admin.agents.show', $agent)
-            ->with('success', 'Application denied.');
+            ->with(
+                'success',
+                'Application denied.'
+            );
     }
 
 
@@ -132,7 +156,70 @@ class AdminAgentController extends Controller
             ->latest()
             ->get();
 
-        return view('admin.approved', compact('agents'));
+        return view(
+            'admin.approved',
+            compact('agents')
+        );
+    }
+
+
+    // =========================
+    // PRIVATE FILE URL
+    // =========================
+
+    private function temporaryFileUrl($path)
+    {
+        if (!$path) {
+            return null;
+        }
+
+        try {
+
+            return Storage::disk('private')->temporaryUrl(
+                $path,
+                now()->addMinutes(30)
+            );
+
+        } catch (\Throwable $e) {
+
+            return null;
+
+        }
+    }
+
+
+    // =========================
+    // REVIEW APPLICATION
+    // =========================
+
+    private function prepareAgentFiles(Agent $agent)
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Agent Photo
+        |--------------------------------------------------------------------------
+        */
+
+        $agent->photo_url = $this->temporaryFileUrl(
+            $agent->photo
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Documents
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($agent->documents as $document) {
+
+            $document->file_url =
+                $this->temporaryFileUrl(
+                    $document->file_path
+                );
+        }
+
+        return $agent;
     }
 
 
@@ -142,7 +229,12 @@ class AdminAgentController extends Controller
 
     public function certificate(Agent $agent)
     {
-        return view('print.certificate', compact('agent'));
+        $agent = $this->prepareAgentFiles($agent);
+
+        return view(
+            'print.certificate',
+            compact('agent')
+        );
     }
 
 
@@ -152,6 +244,11 @@ class AdminAgentController extends Controller
 
     public function idCard(Agent $agent)
     {
-        return view('print.id-card', compact('agent'));
+        $agent = $this->prepareAgentFiles($agent);
+
+        return view(
+            'print.id-card',
+            compact('agent')
+        );
     }
 }
