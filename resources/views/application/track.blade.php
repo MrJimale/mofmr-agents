@@ -6,6 +6,56 @@
 
 <div class="card p-4">
 
+
+    {{-- =====================================================
+         MINISTRY HEADER
+    ====================================================== --}}
+
+    <div class="text-center mb-4">
+
+        <img
+            src="{{ asset('mfmr-logo.jpg') }}"
+            alt="Ministry of Fisheries and Marine Resources"
+            style="
+                width:90px;
+                height:90px;
+                object-fit:cover;
+                border-radius:50%;
+                border:3px solid #d5a928;
+                padding:4px;
+                background:#fff;
+                box-shadow:0 3px 12px rgba(0,0,0,.15);
+            "
+        >
+
+        <h5 style="
+            margin-top:12px;
+            margin-bottom:2px;
+            color:#063b5c;
+            font-weight:700;
+            letter-spacing:.4px;
+        ">
+            MINISTRY OF FISHERIES
+            <br>
+            & MARINE RESOURCES
+        </h5>
+
+        <div style="
+            font-size:11px;
+            color:#6c757d;
+            font-weight:600;
+            letter-spacing:1px;
+        ">
+            PUNTLAND STATE OF SOMALIA
+        </div>
+
+    </div>
+
+
+    {{-- =====================================================
+         PAGE TITLE
+    ====================================================== --}}
+
     <h3 class="mb-2">
         Track Your Application
     </h3>
@@ -141,7 +191,9 @@
 
             <span class="ms-2">
 
-                {{ $agent->city }}, {{ $agent->region }}, {{ $agent->country }}
+                {{ $agent->city }},
+                {{ $agent->region }},
+                {{ $agent->country }}
 
             </span>
 
@@ -197,7 +249,13 @@
 
                 <span class="badge bg-secondary ms-2">
 
-                    {{ strtoupper(str_replace('_', ' ', $agent->status)) }}
+                    {{ strtoupper(
+                        str_replace(
+                            '_',
+                            ' ',
+                            $agent->status
+                        )
+                    ) }}
 
                 </span>
 
