@@ -412,7 +412,7 @@
         </div>
 
         <a
-            href="{{ route('admin.agents.index') }}"
+            href="{{ route('admin.agents') }}"
             class="back-link"
         >
             ← Back to Applications
