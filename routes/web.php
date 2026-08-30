@@ -50,18 +50,14 @@ Route::post('/track-application', function (\Illuminate\Http\Request $request) {
 
         return back()
             ->withInput()
-            ->with(
-                'error',
-                'Application not found. Please check your tracking code.'
-            );
+            ->with('error', 'Application not found. Please check your tracking code.');
+
     }
 
-    return view(
-        'application.track',
-        compact('agent')
-    );
+    return view('application.track', compact('agent'));
 
 })->name('application.track.check');
+
 
 
 /*
@@ -81,135 +77,73 @@ Route::post('/login', [AuthController::class, 'authenticate'])
     ->name('login.authenticate');
 
 
+
 /*
 |--------------------------------------------------------------------------
 | PROTECTED ADMIN ROUTES
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth')
-    ->prefix('admin')
-    ->group(function () {
+Route::middleware('auth')->prefix('admin')->group(function () {
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | ADMIN DASHBOARD
-        |--------------------------------------------------------------------------
-        */
+    // Dashboard
 
-        Route::get('/', [AdminAgentController::class, 'dashboard'])
-            ->name('admin.dashboard');
+    Route::get('/', [AdminAgentController::class, 'dashboard'])
+        ->name('admin.dashboard');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | ALL APPLICATIONS
-        |--------------------------------------------------------------------------
-        |
-        | IMPORTANT:
-        | This route is named admin.agents.index because the review.blade.php
-        | page uses:
-        |
-        | route('admin.agents.index')
-        |
-        */
+    // Applications
 
-        Route::get('/agents', [AdminAgentController::class, 'index'])
-            ->name('admin.agents.index');
+    Route::get('/agents', [AdminAgentController::class, 'index'])
+        ->name('admin.agents');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | REVIEW APPLICATION
-        |--------------------------------------------------------------------------
-        */
+    // Review Application
 
-        Route::get('/agents/{agent}', [AdminAgentController::class, 'show'])
-            ->name('admin.agents.show');
+    Route::get('/agents/{agent}', [AdminAgentController::class, 'show'])
+        ->name('admin.agents.show');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | APPROVE APPLICATION
-        |--------------------------------------------------------------------------
-        */
+    // Approve
 
-        Route::post(
-            '/agents/{agent}/approve',
-            [AdminAgentController::class, 'approve']
-        )->name('admin.agents.approve');
+    Route::post('/agents/{agent}/approve', [AdminAgentController::class, 'approve'])
+        ->name('admin.agents.approve');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | SEND APPLICATION BACK
-        |--------------------------------------------------------------------------
-        */
+    // Send Back
 
-        Route::post(
-            '/agents/{agent}/send-back',
-            [AdminAgentController::class, 'sendBack']
-        )->name('admin.agents.send-back');
+    Route::post('/agents/{agent}/send-back', [AdminAgentController::class, 'sendBack'])
+        ->name('admin.agents.send-back');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | DENY APPLICATION
-        |--------------------------------------------------------------------------
-        */
+    // Deny
 
-        Route::post(
-            '/agents/{agent}/deny',
-            [AdminAgentController::class, 'deny']
-        )->name('admin.agents.deny');
+    Route::post('/agents/{agent}/deny', [AdminAgentController::class, 'deny'])
+        ->name('admin.agents.deny');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | APPROVED AGENTS
-        |--------------------------------------------------------------------------
-        */
+    // Approved Agents
 
-        Route::get(
-            '/approved-agents',
-            [AdminAgentController::class, 'approved']
-        )->name('admin.approved');
+    Route::get('/approved-agents', [AdminAgentController::class, 'approved'])
+        ->name('admin.approved');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | PRINT CERTIFICATE
-        |--------------------------------------------------------------------------
-        */
+    // Certificate
 
-        Route::get(
-            '/agents/{agent}/certificate',
-            [AdminAgentController::class, 'certificate']
-        )->name('admin.certificate');
+    Route::get('/agents/{agent}/certificate', [AdminAgentController::class, 'certificate'])
+        ->name('admin.certificate');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | PRINT ID CARD
-        |--------------------------------------------------------------------------
-        */
+    // ID Card
 
-        Route::get(
-            '/agents/{agent}/id-card',
-            [AdminAgentController::class, 'idCard']
-        )->name('admin.id-card');
+    Route::get('/agents/{agent}/id-card', [AdminAgentController::class, 'idCard'])
+        ->name('admin.id-card');
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | ADMIN LOGOUT
-        |--------------------------------------------------------------------------
-        */
+    // Logout
 
-        Route::post(
-            '/logout',
-            [AuthController::class, 'logout']
-        )->name('admin.logout');
+    Route::post('/logout', [AuthController::class, 'logout'])
+        ->name('admin.logout');
 
-    });
+});
