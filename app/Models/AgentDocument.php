@@ -8,12 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class AgentDocument extends Model
 {
-    /*
-    |--------------------------------------------------------------------------
-    | MASS ASSIGNMENT
-    |--------------------------------------------------------------------------
-    */
-
     protected $fillable = [
         'agent_id',
         'document_type',
@@ -24,42 +18,14 @@ class AgentDocument extends Model
         'reviewed_at',
     ];
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | CASTS
-    |--------------------------------------------------------------------------
-    */
-
     protected $casts = [
         'reviewed_at' => 'datetime',
     ];
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | AGENT RELATIONSHIP
-    |--------------------------------------------------------------------------
-    */
-
     public function agent(): BelongsTo
     {
-        return $this->belongsTo(
-            Agent::class
-        );
+        return $this->belongsTo(Agent::class);
     }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPORARY FILE URL
-    |--------------------------------------------------------------------------
-    |
-    | Documents are stored privately.
-    |
-    | This generates a temporary URL which expires after 30 minutes.
-    |
-    */
 
     public function getFileUrlAttribute(): ?string
     {
@@ -68,17 +34,12 @@ class AgentDocument extends Model
         }
 
         try {
-
-            return Storage::disk('private')
-                ->temporaryUrl(
-                    $this->file_path,
-                    now()->addMinutes(30)
-                );
-
+            return Storage::disk('private')->temporaryUrl(
+                $this->file_path,
+                now()->addMinutes(30)
+            );
         } catch (\Throwable $e) {
-
             return null;
-
         }
     }
 }
