@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminAgentController extends Controller
 {
-    // =========================
+    // ========================================================================
     // ADMIN DASHBOARD
-    // =========================
+    // ========================================================================
 
     public function dashboard()
     {
@@ -22,69 +22,191 @@ class AdminAgentController extends Controller
 
         $denied = Agent::where('status', 'denied')->count();
 
-        $correction = Agent::where('status', 'correction_required')->count();
+        $correction = Agent::where(
+            'status',
+            'correction_required'
+        )->count();
 
         $agents = Agent::latest()
             ->take(10)
             ->get();
 
-        return view('admin.dashboard', compact(
-            'total',
-            'pending',
-            'approved',
-            'denied',
-            'correction',
-            'agents'
-        ));
+        return view(
+            'admin.dashboard',
+            compact(
+                'total',
+                'pending',
+                'approved',
+                'denied',
+                'correction',
+                'agents'
+            )
+        );
     }
 
 
-    // =========================
+    // ========================================================================
     // ALL APPLICATIONS
-    // =========================
+    // ========================================================================
 
     public function index()
     {
         $agents = Agent::latest()->get();
 
-        return view('admin.agents', compact('agents'));
+        return view(
+            'admin.agents',
+            compact('agents')
+        );
     }
 
 
-    // =========================
-    // VIEW APPLICATION
-    // =========================
+    // ========================================================================
+    // VIEW / REVIEW APPLICATION
+    // ========================================================================
 
     public function show(Agent $agent)
     {
+        /*
+        |--------------------------------------------------------------------------
+        | Load submitted documents
+        |--------------------------------------------------------------------------
+        */
+
         $agent->load('documents');
 
-        return view('admin.review', compact('agent'));
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERATE TEMPORARY PHOTO URL
+        |--------------------------------------------------------------------------
+        |
+        | The photo remains private.
+        |
+        | The generated URL expires after 30 minutes.
+        |
+        */
+
+        if ($agent->photo) {
+
+            try {
+
+                $agent->photo_url = Storage::disk('private')
+                    ->temporaryUrl(
+                        $agent->photo,
+                        now()->addMinutes(30)
+                    );
+
+            } catch (\Throwable $e) {
+
+                $agent->photo_url = null;
+            }
+
+        } else {
+
+            $agent->photo_url = null;
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERATE TEMPORARY DOCUMENT URLS
+        |--------------------------------------------------------------------------
+        |
+        | Every document receives its own temporary URL.
+        |
+        */
+
+        foreach ($agent->documents as $document) {
+
+            if (!$document->file_path) {
+
+                $document->file_url = null;
+
+                continue;
+            }
+
+
+            try {
+
+                $document->file_url = Storage::disk('private')
+                    ->temporaryUrl(
+                        $document->file_path,
+                        now()->addMinutes(30)
+                    );
+
+            } catch (\Throwable $e) {
+
+                $document->file_url = null;
+            }
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SEND APPLICATION TO REVIEW PAGE
+        |--------------------------------------------------------------------------
+        */
+
+        return view(
+            'admin.review',
+            compact('agent')
+        );
     }
 
 
-    // =========================
-    // APPROVE
-    // =========================
+    // ========================================================================
+    // APPROVE APPLICATION
+    // ========================================================================
 
     public function approve(Agent $agent)
     {
         $agent->status = 'approved';
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | GENERATE REGISTRATION NUMBER
+        |--------------------------------------------------------------------------
+        */
+
         $agent->registration_number =
             'MFMR-' .
             date('Y') .
             '-' .
-            str_pad($agent->id, 5, '0', STR_PAD_LEFT);
+            str_pad(
+                $agent->id,
+                5,
+                '0',
+                STR_PAD_LEFT
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | APPROVAL DATE
+        |--------------------------------------------------------------------------
+        */
 
         $agent->approved_at = now();
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | CLEAR PREVIOUS ADMIN COMMENT
+        |--------------------------------------------------------------------------
+        */
+
         $agent->admin_comment = null;
+
 
         $agent->save();
 
+
         return redirect()
-            ->route('admin.agents.show', $agent)
+            ->route(
+                'admin.agents.show',
+                $agent
+            )
             ->with(
                 'success',
                 'Agent approved successfully.'
@@ -92,26 +214,33 @@ class AdminAgentController extends Controller
     }
 
 
-    // =========================
-    // SEND BACK FOR CORRECTION
-    // =========================
+    // ========================================================================
+    // SEND APPLICATION BACK FOR CORRECTION
+    // ========================================================================
 
     public function sendBack(
         Request $request,
         Agent $agent
     ) {
+
         $request->validate([
             'comment' => 'nullable|string|max:5000',
         ]);
 
+
         $agent->status = 'correction_required';
 
-        $agent->admin_comment = $request->comment;
+        $agent->admin_comment =
+            $request->comment;
 
         $agent->save();
 
+
         return redirect()
-            ->route('admin.agents.show', $agent)
+            ->route(
+                'admin.agents.show',
+                $agent
+            )
             ->with(
                 'success',
                 'Application sent back for correction.'
@@ -119,26 +248,33 @@ class AdminAgentController extends Controller
     }
 
 
-    // =========================
-    // DENY
-    // =========================
+    // ========================================================================
+    // DENY APPLICATION
+    // ========================================================================
 
     public function deny(
         Request $request,
         Agent $agent
     ) {
+
         $request->validate([
             'comment' => 'nullable|string|max:5000',
         ]);
 
+
         $agent->status = 'denied';
 
-        $agent->admin_comment = $request->comment;
+        $agent->admin_comment =
+            $request->comment;
 
         $agent->save();
 
+
         return redirect()
-            ->route('admin.agents.show', $agent)
+            ->route(
+                'admin.agents.show',
+                $agent
+            )
             ->with(
                 'success',
                 'Application denied.'
@@ -146,15 +282,19 @@ class AdminAgentController extends Controller
     }
 
 
-    // =========================
+    // ========================================================================
     // APPROVED AGENTS
-    // =========================
+    // ========================================================================
 
     public function approved()
     {
-        $agents = Agent::where('status', 'approved')
+        $agents = Agent::where(
+            'status',
+            'approved'
+        )
             ->latest()
             ->get();
+
 
         return view(
             'admin.approved',
@@ -163,74 +303,12 @@ class AdminAgentController extends Controller
     }
 
 
-    // =========================
-    // PRIVATE FILE URL
-    // =========================
-
-    private function temporaryFileUrl($path)
-    {
-        if (!$path) {
-            return null;
-        }
-
-        try {
-
-            return Storage::disk('private')->temporaryUrl(
-                $path,
-                now()->addMinutes(30)
-            );
-
-        } catch (\Throwable $e) {
-
-            return null;
-
-        }
-    }
-
-
-    // =========================
-    // REVIEW APPLICATION
-    // =========================
-
-    private function prepareAgentFiles(Agent $agent)
-    {
-        /*
-        |--------------------------------------------------------------------------
-        | Agent Photo
-        |--------------------------------------------------------------------------
-        */
-
-        $agent->photo_url = $this->temporaryFileUrl(
-            $agent->photo
-        );
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Documents
-        |--------------------------------------------------------------------------
-        */
-
-        foreach ($agent->documents as $document) {
-
-            $document->file_url =
-                $this->temporaryFileUrl(
-                    $document->file_path
-                );
-        }
-
-        return $agent;
-    }
-
-
-    // =========================
+    // ========================================================================
     // PRINT CERTIFICATE
-    // =========================
+    // ========================================================================
 
     public function certificate(Agent $agent)
     {
-        $agent = $this->prepareAgentFiles($agent);
-
         return view(
             'print.certificate',
             compact('agent')
@@ -238,17 +316,44 @@ class AdminAgentController extends Controller
     }
 
 
-    // =========================
+    // ========================================================================
     // PRINT ID CARD
-    // =========================
+    // ========================================================================
 
     public function idCard(Agent $agent)
     {
-        $agent = $this->prepareAgentFiles($agent);
+        /*
+        |--------------------------------------------------------------------------
+        | TEMPORARY PHOTO URL FOR ID CARD
+        |--------------------------------------------------------------------------
+        */
+
+        $photoUrl = null;
+
+
+        if ($agent->photo) {
+
+            try {
+
+                $photoUrl = Storage::disk('private')
+                    ->temporaryUrl(
+                        $agent->photo,
+                        now()->addMinutes(30)
+                    );
+
+            } catch (\Throwable $e) {
+
+                $photoUrl = null;
+            }
+        }
+
 
         return view(
             'print.id-card',
-            compact('agent')
+            compact(
+                'agent',
+                'photoUrl'
+            )
         );
     }
 }
