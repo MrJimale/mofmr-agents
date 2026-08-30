@@ -7,12 +7,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Agent extends Model
 {
-    /*
-    |--------------------------------------------------------------------------
-    | MASS ASSIGNMENT
-    |--------------------------------------------------------------------------
-    */
-
     protected $fillable = [
         'name',
         'phone',
@@ -29,28 +23,12 @@ class Agent extends Model
         'approved_at',
     ];
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | DATE CASTING
-    |--------------------------------------------------------------------------
-    */
-
     protected $casts = [
         'approved_at' => 'datetime',
     ];
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | DOCUMENTS
-    |--------------------------------------------------------------------------
-    */
-
     public function documents(): HasMany
     {
-        return $this->hasMany(
-            AgentDocument::class
-        );
+        return $this->hasMany(AgentDocument::class);
     }
 }
