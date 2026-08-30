@@ -6,227 +6,279 @@
 
 <style>
 
-    /* =====================================================
-       PAGE HEADER
-    ===================================================== */
+/* =====================================================
+   PAGE HEADER
+===================================================== */
 
-    .review-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-        gap: 15px;
-        flex-wrap: wrap;
-    }
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
 
-    .review-title h2 {
-        margin: 0;
-        font-weight: 700;
-        color: #063b5c;
-    }
+.review-title h2 {
+    margin: 0;
+    font-weight: 700;
+    color: #063b5c;
+}
 
-    .review-title p {
-        margin: 5px 0 0;
-        color: #7b858c;
-        font-size: 13px;
-    }
+.review-title p {
+    margin: 5px 0 0;
+    color: #7b858c;
+    font-size: 13px;
+}
 
 
-    /* =====================================================
-       CARDS
-    ===================================================== */
+/* =====================================================
+   CARDS
+===================================================== */
 
-    .review-card {
-        background: #ffffff;
-        border-radius: 14px;
-        border: 1px solid #e8edf1;
-        box-shadow: 0 4px 18px rgba(0,0,0,.05);
-        margin-bottom: 20px;
-        overflow: hidden;
-    }
+.review-card {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e8edf1;
+    box-shadow: 0 4px 18px rgba(0,0,0,.05);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
 
-    .review-card-header {
-        padding: 17px 20px;
-        border-bottom: 1px solid #edf0f2;
-        background: #fafcfd;
-    }
+.review-card-header {
+    padding: 17px 20px;
+    border-bottom: 1px solid #edf0f2;
+    background: #fafcfd;
+}
 
-    .review-card-header h5 {
-        margin: 0;
-        color: #063b5c;
-        font-weight: 700;
-    }
+.review-card-header h5 {
+    margin: 0;
+    color: #063b5c;
+    font-weight: 700;
+}
+
+.review-card-body {
+    padding: 22px;
+}
+
+
+/* =====================================================
+   INFORMATION
+===================================================== */
+
+.info-item {
+    margin-bottom: 18px;
+}
+
+.info-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    color: #8a969e;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    color: #26343d;
+    font-size: 14px;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+
+/* =====================================================
+   PHOTO
+===================================================== */
+
+.agent-photo {
+    width: 145px;
+    height: 145px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 4px solid #ffffff;
+    box-shadow: 0 4px 15px rgba(0,0,0,.12);
+}
+
+.no-photo {
+    width: 145px;
+    height: 145px;
+    border-radius: 12px;
+    background: #f1f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8a969e;
+    font-size: 13px;
+    margin: auto;
+    border: 1px solid #e2e7ea;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 13px;
+    border-radius: 30px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-approved {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-denied {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.status-correction {
+    background: #ffe5b4;
+    color: #8a4b00;
+}
+
+
+/* =====================================================
+   APPLICATION CODES
+===================================================== */
+
+.application-code {
+    display: inline-block;
+    font-family: monospace;
+    background: #eef4f7;
+    color: #063b5c;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    border: 1px solid #e0e9ed;
+    letter-spacing: .4px;
+}
+
+
+/* =====================================================
+   DOCUMENTS
+===================================================== */
+
+.documents-table th {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: #7b858c;
+    background: #f8fafb;
+    border-bottom: 1px solid #e9ecef;
+    white-space: nowrap;
+}
+
+.documents-table td {
+    vertical-align: middle;
+    font-size: 13px;
+}
+
+.document-name {
+    max-width: 350px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+/* =====================================================
+   DOCUMENT ACTIONS
+===================================================== */
+
+.document-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.document-actions .btn {
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   DECISION
+===================================================== */
+
+.decision-box {
+    background: #f8fafb;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e8edf1;
+}
+
+.decision-box textarea {
+    border-radius: 9px;
+    resize: vertical;
+}
+
+.decision-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+
+/* =====================================================
+   APPLICATION META
+===================================================== */
+
+.meta-line {
+    font-size: 11px;
+    color: #8b969d;
+}
+
+
+/* =====================================================
+   PRIVATE FILE NOTICE
+===================================================== */
+
+.private-file-notice {
+    background: #eef7fb;
+    border: 1px solid #d7eaf2;
+    color: #376477;
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-size: 11px;
+    margin-bottom: 15px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 768px) {
 
     .review-card-body {
-        padding: 22px;
+        padding: 16px;
     }
 
-
-    /* =====================================================
-       INFORMATION
-    ===================================================== */
-
-    .info-item {
-        margin-bottom: 18px;
+    .document-actions {
+        justify-content: flex-start;
     }
 
-    .info-label {
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: .7px;
-        color: #8a969e;
-        font-weight: 700;
-        margin-bottom: 4px;
+    .documents-table {
+        min-width: 700px;
     }
 
-    .info-value {
-        color: #26343d;
-        font-size: 14px;
-        font-weight: 500;
-        word-break: break-word;
-    }
-
-
-    /* =====================================================
-       PHOTO
-    ===================================================== */
-
-    .agent-photo {
-        width: 145px;
-        height: 145px;
-        object-fit: cover;
-        border-radius: 12px;
-        border: 4px solid #ffffff;
-        box-shadow: 0 4px 15px rgba(0,0,0,.12);
-    }
-
-    .no-photo {
-        width: 145px;
-        height: 145px;
-        border-radius: 12px;
-        background: #f1f4f6;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #8a969e;
-        font-size: 13px;
-        margin: auto;
-        border: 1px solid #e2e7ea;
-    }
-
-
-    /* =====================================================
-       STATUS
-    ===================================================== */
-
-    .status-badge {
-        display: inline-block;
-        padding: 6px 13px;
-        border-radius: 30px;
-        font-size: 10px;
-        font-weight: 700;
-        text-transform: uppercase;
-    }
-
-    .status-pending {
-        background: #fff3cd;
-        color: #856404;
-    }
-
-    .status-approved {
-        background: #d1e7dd;
-        color: #0f5132;
-    }
-
-    .status-denied {
-        background: #f8d7da;
-        color: #842029;
-    }
-
-    .status-correction {
-        background: #ffe5b4;
-        color: #8a4b00;
-    }
-
-
-    /* =====================================================
-       APPLICATION CODES
-    ===================================================== */
-
-    .application-code {
-        display: inline-block;
-        font-family: monospace;
-        background: #eef4f7;
-        color: #063b5c;
-        padding: 6px 10px;
-        border-radius: 5px;
-        font-size: 12px;
-        border: 1px solid #e0e9ed;
-        letter-spacing: .4px;
-    }
-
-
-    /* =====================================================
-       DOCUMENTS
-    ===================================================== */
-
-    .documents-table th {
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: .5px;
-        color: #7b858c;
-        background: #f8fafb;
-        border-bottom: 1px solid #e9ecef;
-        white-space: nowrap;
-    }
-
-    .documents-table td {
-        vertical-align: middle;
-        font-size: 13px;
-    }
-
-    .document-name {
-        max-width: 350px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: inline-block;
-        vertical-align: middle;
-    }
-
-
-    /* =====================================================
-       DECISION
-    ===================================================== */
-
-    .decision-box {
-        background: #f8fafb;
-        border-radius: 12px;
-        padding: 20px;
-        border: 1px solid #e8edf1;
-    }
-
-    .decision-box textarea {
-        border-radius: 9px;
-        resize: vertical;
-    }
-
-    .decision-buttons {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 15px;
-    }
-
-
-    /* =====================================================
-       APPLICATION META
-    ===================================================== */
-
-    .meta-line {
-        font-size: 11px;
-        color: #8b969d;
-    }
+}
 
 </style>
 
@@ -568,9 +620,7 @@
                 @else
 
                     <div class="no-photo">
-
                         No Photo Available
-
                     </div>
 
                 @endif
@@ -596,9 +646,17 @@
 
         <div class="d-flex justify-content-between align-items-center">
 
-            <h5>
-                Submitted Documents
-            </h5>
+            <div>
+
+                <h5>
+                    Submitted Documents
+                </h5>
+
+                <div class="meta-line mt-1">
+                    Documents submitted with this application
+                </div>
+
+            </div>
 
             <span class="meta-line">
 
@@ -614,6 +672,20 @@
 
 
     <div class="review-card-body">
+
+
+        {{-- PRIVATE STORAGE NOTICE --}}
+
+        <div class="private-file-notice">
+
+            <strong>Secure documents:</strong>
+
+            Submitted documents are stored in private storage.
+            Document links are temporary and expire automatically
+            after 30 minutes.
+
+        </div>
+
 
         <div class="table-responsive">
 
@@ -651,12 +723,11 @@
 
                         <tr>
 
+
                             {{-- NUMBER --}}
 
                             <td>
-
                                 {{ $loop->iteration }}
-
                             </td>
 
 
@@ -691,14 +762,31 @@
 
                                 @if($document->file_url)
 
-                                    <a
-                                        href="{{ $document->file_url }}"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="btn btn-sm btn-outline-primary"
-                                    >
-                                        View Document
-                                    </a>
+                                    <div class="document-actions">
+
+                                        {{-- VIEW DOCUMENT --}}
+
+                                        <a
+                                            href="{{ $document->file_url }}"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="btn btn-sm btn-outline-primary"
+                                        >
+                                            View Document
+                                        </a>
+
+
+                                        {{-- DOWNLOAD DOCUMENT --}}
+
+                                        <a
+                                            href="{{ $document->file_url }}"
+                                            download="{{ $document->file_name }}"
+                                            class="btn btn-sm btn-outline-success"
+                                        >
+                                            Download
+                                        </a>
+
+                                    </div>
 
                                 @else
 
@@ -850,12 +938,14 @@
                             type="submit"
                             class="btn btn-warning"
                             onclick="
+
                                 document.getElementById('sendBackComment').value =
                                 document.getElementById('comment').value;
 
                                 if (
                                     !document.getElementById('comment').value.trim()
                                 ) {
+
                                     alert(
                                         'Please provide a comment explaining what needs to be corrected.'
                                     );
@@ -866,6 +956,7 @@
                                 return confirm(
                                     'Send this application back to the applicant for correction?'
                                 );
+
                             "
                         >
 
@@ -899,12 +990,14 @@
                             type="submit"
                             class="btn btn-danger"
                             onclick="
+
                                 document.getElementById('denyComment').value =
                                 document.getElementById('comment').value;
 
                                 if (
                                     !document.getElementById('comment').value.trim()
                                 ) {
+
                                     alert(
                                         'Please provide a comment explaining the reason for denial.'
                                     );
@@ -915,6 +1008,7 @@
                                 return confirm(
                                     'Are you sure you want to deny this application?'
                                 );
+
                             "
                         >
 
