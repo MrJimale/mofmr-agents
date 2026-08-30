@@ -10,6 +10,20 @@ class AgentDocument extends Model
 {
     /*
     |--------------------------------------------------------------------------
+    | DATABASE TABLE
+    |--------------------------------------------------------------------------
+    |
+    | The existing migration creates the table as "documents".
+    | Laravel would normally look for "agent_documents" because
+    | this model is called AgentDocument.
+    |
+    */
+
+    protected $table = 'documents';
+
+
+    /*
+    |--------------------------------------------------------------------------
     | MASS ASSIGNMENT
     |--------------------------------------------------------------------------
     */
@@ -38,7 +52,7 @@ class AgentDocument extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | AGENT
+    | AGENT RELATIONSHIP
     |--------------------------------------------------------------------------
     */
 
@@ -54,6 +68,11 @@ class AgentDocument extends Model
     |--------------------------------------------------------------------------
     | TEMPORARY PRIVATE FILE URL
     |--------------------------------------------------------------------------
+    |
+    | Documents are stored privately.
+    |
+    | The generated URL expires after 30 minutes.
+    |
     */
 
     public function getFileUrlAttribute(): ?string
