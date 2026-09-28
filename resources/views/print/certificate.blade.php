@@ -736,7 +736,7 @@
 
     <img
         class="watermark"
-        src="https://scontent.fbsa1-1.fna.fbcdn.net/v/t39.30808-6/672688130_1267529012232197_8272294226841489506_n.jpg?stp=dst-jpg_tt6&cstp=mx400x400&ctp=s400x400&_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=18Ofv1XI_z8Q7kNvwFmht2d&_nc_oc=Adr6RIxjlnhLWLLdWvZa9Thlf4SZx59lanoWJkdhReWFvH0ocLngjTGYxMk5nq7EozA&_nc_zt=23&_nc_ht=scontent.fbsa1-1.fna&_nc_gid=n5ktm50L_ZUhEM1gfyk4yw&_nc_ss=7b2a8&oh=00_AQJNTZlCepFSAkMahK6yV1AkjeW7m53Vyyh1pVjEDDhFkg&oe=6A98EBD0"
+        src="{{ asset('mfmr-logo.jpg') }}"
         alt="Ministry Logo"
     >
 
